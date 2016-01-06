@@ -6,6 +6,8 @@ defmodule Issues.CLI do
   Handle the command line parsing and the dispatch to the various functions that end up generating a table of the lat _n_ issues in a github project
   """
 
+  import Issues.TableFormatter, only: [ print_table_for_columns: 2 ]
+
   def run (argv) do
     argv
       |> parse_args
@@ -47,6 +49,7 @@ defmodule Issues.CLI do
       |> convert_to_list_of_hashdicts
       |> sort_into_ascending_order
       |> Enum.take( count )
+      |> print_table_for_columns( ["number", "created_at", "title"] )
   end
 
   def decode_response( {:ok, body} ), do: body
